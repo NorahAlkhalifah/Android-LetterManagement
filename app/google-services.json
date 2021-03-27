@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "542753252420",
+    "firebase_url": "https://letter-management-34b87-default-rtdb.firebaseio.com",
+    "project_id": "letter-management-34b87",
+    "storage_bucket": "letter-management-34b87.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542753252420:android:a2df129f754f9d44954811",
+        "android_client_info": {
+          "package_name": "com.example.biometric"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542753252420-uu96n86d32u5sooe40q418roted786mk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEpsjz8MYu87sptMtcr9COVade3A-EWrM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542753252420-uu96n86d32u5sooe40q418roted786mk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
