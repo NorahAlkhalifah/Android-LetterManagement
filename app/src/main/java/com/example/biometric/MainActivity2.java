@@ -14,6 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +51,9 @@ public class MainActivity2 extends AppCompatActivity {
     private BiometricPrompt.PromptInfo promptInfo;
     private String Id;
     private String code = "";
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,58 +136,90 @@ public class MainActivity2 extends AppCompatActivity {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Toast.makeText(MainActivity2.this, "Success", Toast.LENGTH_SHORT).show();
-                                rm -rf .git
+                                Log.v("auth",  auth.toString());
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                //   Log.w(TAG, "Error adding document", e);
+                                  Log.w("error", "Error adding document", e);
+
                             }
                         });
 
+                RequestQueue queue = Volley.newRequestQueue(MainActivity2.this);
+                String url ="https://lmsacs.herokuapp.com/delete_auth?id="+code;
 
-                new Timer().schedule(new TimerTask() {
-                    public void run() {
-                        FirebaseFirestore.getInstance().collection("Authentications")
-                                .whereEqualTo("code", code)
-                                .get()
-                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                                        List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                                        for(DocumentSnapshot snapshot : snapshotList)
-                                        {
-                                            batch.delete(snapshot.getReference());
-
-                                        }
-                                        batch.commit()
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Log.d("success", "deleted successfully from firebase");
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.e("failure", "Did not delete");
-
-                                                    }
-                                                });
-
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
                             @Override
-                            public void onFailure(@NonNull Exception e) {
+                            public void onResponse(String response) {
+                                // Display the first 500 characters of the response string.
+
 
                             }
-                        });
-
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
                     }
-                }, 120000);
+                });
+
+// Add the request to the RequestQueue.
+                queue.add(stringRequest);
+
+
+
+
+
+
+// Delete generated code after 5 mins from firestore
+
+//                new Timer().schedule(new TimerTask() {
+//                    public void run() {
+//                        FirebaseFirestore.getInstance().collection("Authentications")
+//                                .whereEqualTo("code", code)
+//                                .get()
+//                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                                    @Override
+//                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//                                        List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+//                                        for(DocumentSnapshot snapshot : snapshotList)
+//                                        {
+//                                            batch.delete(snapshot.getReference());
+//
+//                                        }
+//                                        batch.commit()
+//                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                    @Override
+//                                                    public void onSuccess(Void aVoid) {
+//                                                        Log.d("success", "deleted successfully from firebase");
+//                                                    }
+//                                                })
+//                                                .addOnFailureListener(new OnFailureListener() {
+//                                                    @Override
+//                                                    public void onFailure(@NonNull Exception e) {
+//                                                        Log.e("failure", "Did not delete");
+//
+//                                                    }
+//                                                });
+//
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//
+//                            }
+//                        });
+//
+//                    }
+//                }, 120000);
+//
+
+
             }
 
 
